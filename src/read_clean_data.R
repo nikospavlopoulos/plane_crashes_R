@@ -1,4 +1,4 @@
-setwd("~/Dropbox/DataAnalyst/6_CAPSTONE_R/plane_crashes")
+setwd("~/Dropbox/DataAnalyst/6_CAPSTONE_R/plane_crashes_R/src")
 
 #Load Libraries
 library(tidyverse)
@@ -14,6 +14,7 @@ library(tidyverse)
 # Remove rows where all columns 6:12 contain only 0
 # Correct rows where Fatalities total do not match the sum of Fatalities.Passangers and Fatalities.Crew
 # Create Total_Fatalities Column that includes the Fatalities that took place on the Ground
+# Extract an Integer representing Decade from the year
 
 crashes <- read.csv("crashes.csv") |>
   select(!c(Time, Flight.., Registration, cn.ln)) |>
@@ -32,4 +33,9 @@ crashes <- read.csv("crashes.csv") |>
   mutate(
     Total_Fatalities = Fatalities + Ground
   ) |>
-  relocate(Total_Fatalities, .after = Ground)
+  relocate(Total_Fatalities, .after = Ground) |>
+  mutate(
+    Decade = floor(Year/10) * 10
+  ) |>
+  relocate(Decade, .after = Year)
+

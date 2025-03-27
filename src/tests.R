@@ -1,3 +1,6 @@
+# Check datatypes in dataframe
+str(crashes)
+
 # Check if Fatalities == Fatalities.Crew + Fatalities.Passengers
 Fatalities_Check = crashes$Fatalities == crashes$Fatalities.Passangers + crashes$Fatalities.Crew
 crashes$Fatalities = ifelse(Fatalities_Check, crashes$Fatalities, crashes$Fatalities.Passangers + crashes$Fatalities.Crew)
@@ -13,4 +16,3 @@ correct_fatalities <- crashes |>
 View(incorrect_fatalities)
 View(correct_fatalities)
 
-str(crashes)
