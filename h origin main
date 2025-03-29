@@ -1,0 +1,23 @@
+[33mcommit 1147727edb7d1f0ac5082b61b81f74d9d076241f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Nikos Pavlopoulos <npavlopoulos@gmail.com>
+Date:   Thu Mar 27 08:20:45 2025 +0200
+
+    time chart, regression,clustering drafts, update read_clean
+
+[33mcommit 61236553cb27a63619f4f947b4043fbde1583c21[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Nikos Pavlopoulos <npavlopoulos@gmail.com>
+Date:   Thu Mar 27 05:16:21 2025 +0200
+
+    loading cleaning tests
+
+[33mcommit b627ed0ed34b22362e211f2ee89c1eae2647ed40[m
+Author: Nikos Pavlopoulos <npavlopoulos@gmail.com>
+Date:   Thu Mar 27 02:05:11 2025 +0200
+
+    Add files via upload
+
+[33mcommit 525ef100fcfd11d6dfde3e62405eb0b481172c3e[m
+Author: Nikos Pavlopoulos <npavlopoulos@gmail.com>
+Date:   Thu Mar 27 02:01:04 2025 +0200
+
+    Initial commit
