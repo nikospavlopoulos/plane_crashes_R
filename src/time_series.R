@@ -6,7 +6,8 @@ fatalities_decade <- crashes |>
 
 ggplot(fatalities_decade,
        aes(x = Decade, y = Fatalities)) +
-  geom_col(aes(fill = Decade))
+  geom_col(aes(fill = Decade)) + 
+  labs ( title = "Fatalities Per Year Bar Chart")
 
 
 # Plot diagram with the total fatalities per crash
@@ -17,7 +18,7 @@ ggplot(
   geom_jitter(shape = "bullet", size = 0.5, color="red") +
   theme_linedraw() +
   labs(
-    title = "Total Fatalities Per Year"
+    title = "Total Fatalities Per Year Scatterplot (9_11 outlier Event)"
   )
 # Observing an Outlier event of the 9/11 due to the thousands of ground deaths
 # TODO repeat analysis and Regression model without the ground deaths of 9/11

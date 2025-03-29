@@ -33,7 +33,7 @@ geom_point(shape = "bullet", size = 4, color="red") +
   geom_smooth(method = "lm", se = TRUE, level = 0.75, color = "green") +
   theme_linedraw() + 
   labs(
-    title = "Total Fatalities Per Decade"
+    title = "Total Fatalities Per Decade (Linear vs LOESS Locally Weighted Scatterplot)"
   )
 # Big deviation between the two lines demonstrates that relationship is not linear. 
 # TODO, try to implement an alternative model, (Polynomial)
