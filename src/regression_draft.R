@@ -1,3 +1,44 @@
+# Grouping into decades for easier and smoother analysis of the trends
+set.seed(111) # Set seed for reproducability
+
+# Summarize total fatalities per decade
+sum_fatalities_per_decade <- crashes |>
+  select(Decade, Total_Fatalities) |>
+  filter(Decade != 1910 & Decade != 2020) |> # Omitting the first and last incomplete decades (~2 or 3 years of data)
+  group_by(Decade) |>
+  summarise(Total_Fatalities = sum(Total_Fatalities))
+
+# Developing a Linear Regression Model
+# Independent variable = Decades, Dependent = Fatalities
+plot(crashes$Decade, crashes$Total_Fatalities)
+fatalities_decade_model <- lm(crashes$Total_Fatalities ~ crashes$Decade, data = crashes)
+summary(fatalities_decade_model)
+
+### Check alternative data frame
+sum_fatalities_per_decade_model <- lm(Total_Fatalities ~ Decade, data = sum_fatalities_per_decade)
+summary(sum_fatalities_per_decade_model)
+anova(sum_fatalities_per_decade_model)
+
+plot(sum_fatalities_per_decade_model)
+
+# Plot diagram with the total fatalities per decade
+ggplot(
+  sum_fatalities_per_decade,
+  aes(x = Decade, y = Total_Fatalities)
+) + 
+geom_point(shape = "bullet", size = 4, color="red") +
+ scale_x_continuous(breaks = seq(1910,2020, by = 10)) +
+  # geom_line() +
+  geom_smooth(se = TRUE, level = 0.75) + # Default Method = loess ?loess
+  geom_smooth(method = "lm", se = TRUE, level = 0.75, color = "green") +
+  theme_linedraw() + 
+  labs(
+    title = "Total Fatalities Per Decade"
+  )
+# Big deviation between the two lines demonstrates that relationship is not linear. 
+# TODO, try to implement an alternative model, (Polynomial)
+
+
 # Correlation between Year and Fatalities (Pearson default)
 cor(crashes$Year, crashes$Fatalities)
 plot(crashes$Year, crashes$Fatalities)
