@@ -2,6 +2,7 @@ setwd("~/Dropbox/DataAnalyst/6_CAPSTONE_R/plane_crashes_R/src")
 
 #Load Libraries
 library(tidyverse)
+library(scales)
 
 # Read the dataset csv and save it in a dataframe "crashes"
 # Columns [Time, Flight, Registration, cn.ln] are largely incomplete, 

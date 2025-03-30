@@ -1,3 +1,6 @@
+library(tidyverse)
+library(scales)
+
 # Summarize total fatalities per decade
 sum_fatalities_per_decade <- crashes |>
   select(Decade, Total_Fatalities) |>
