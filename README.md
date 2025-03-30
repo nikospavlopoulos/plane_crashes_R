@@ -224,7 +224,7 @@ ggplot(sum_passengers_per_decade,
 
 | ![Fatalities_Per_Decade_Chart](./plots/Fatalities_Per_Decade_Bar_Chart.png) |
 | ------------- |
-| ![Passenger_Per_Decade_Bar_Chart](/plots/Passengers_Per_Decade_Bar_Chart.png) |
+| ![Passenger_Per_Decade_Bar_Chart](./plots/Passengers_Per_Decade_Bar_Chart.png) |
 <br/>
 
  ### 3.4 Regression Analysis
