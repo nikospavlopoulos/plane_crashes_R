@@ -39,3 +39,25 @@ crashes <- read.csv("crashes.csv") |>
   ) |>
   relocate(Decade, .after = Year)
 
+
+# Read Passengeris Carried total, set column names, filter only data about World
+# Pivot the row/column creating a column with the year
+# Convert String - character data to numeric
+# Create Column decades
+passengers <- read.csv("Passengers_Carried_1970_2021.csv", header = FALSE) |> 
+  (\(x) `colnames<-`(x, x[5,]))() |> 
+  slice(-c(1:5)) |> 
+  rename(Country_Name = `Country Name`) |>
+  filter(Country_Name == "World") |>
+  select(c(1:4,15:66)) |>
+  pivot_longer(
+    cols = 5:56,
+    names_to = "Year",
+    values_to = "Passengers_Traveled"
+  ) |>
+  mutate(across(Year, as.numeric)) |>
+  mutate(Passengers_Traveled = as.numeric(gsub(",", "", Passengers_Traveled))) |>
+  mutate(
+    Decade = floor(Year/10) * 10
+  ) |>
+  relocate(Decade, .after = Year)

@@ -1,12 +1,4 @@
-# Grouping into decades for easier and smoother analysis of the trends
 set.seed(111) # Set seed for reproducability
-
-# Summarize total fatalities per decade
-sum_fatalities_per_decade <- crashes |>
-  select(Decade, Total_Fatalities) |>
-  filter(Decade != 1910 & Decade != 2020) |> # Omitting the first and last incomplete decades (~2 or 3 years of data)
-  group_by(Decade) |>
-  summarise(Total_Fatalities = sum(Total_Fatalities))
 
 # Developing a Linear Regression Model
 # Independent variable = Decades, Dependent = Fatalities
