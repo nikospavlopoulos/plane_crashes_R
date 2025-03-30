@@ -1,12 +1,5 @@
 # Analysis of Airplane Crashes and Air Transport Data
 ###### GitHub Repository: [https://github.com/nikospavlopoulos/plane\_crashes\_R](https://github.com/nikospavlopoulos/plane_crashes_R)
-# Table of Contents
-
-- [1. Introduction](#1-introduction)
-- [2. Datasets and Licenses](#2-datasets-and-licenses)
-- [3. Methodology & Analysis](#3-methodology-analysis)
-- [4. Conclusion, Insights & Limitations](#4-conclusion-insights-limitations)
-- [5. Appendix](#5-appendix)
 
 ## 1\. Introduction
 Air travel has not only revolutionized the way we connect globally but also transformed the dynamics of transportation safety and risk management. With more than a century of aviation history, air travel, is regarded as the safest mode of transportation.
@@ -42,7 +35,7 @@ How does the volume of air passengers correlate with crash statistics? <br/>
 Can regression models explain the variation in safety records? <br/>
 Does increased air travel lead to a proportional increase in incidents, or are safety improvements offsetting higher traffic levels?
 
-## 3\. Methodology & Analysis
+## 3\. Methodology \& Analysis
 
 Our analysis is divided into several stages. [R programming language](https://www.r-project.org/) is used and the development environment is [RStudio](https://posit.co/products/open-source/rstudio/). 
 Each phase is implemented using R scripts, organized within the repository’s **[`src`](https://github.com/nikospavlopoulos/plane_crashes_R/tree/main/src)** directory. <br/>
@@ -200,9 +193,9 @@ ggplot(sum_passengers_per_year,
 ```
 <br/>
 
-| ![Fatalities_Per_Year_Bar_Chart](./plane_crashes_R/plots/Fatalities_Per_Year_Bar_Chart.png) |
+| ![Fatalities_Per_Year_Bar_Chart](./plots/Fatalities_Per_Year_Bar_Chart.png) |
 | ------------- |
-| ![Passenger_Per_Year_Bar_Chart](./plane_crashes_R/plots/Passengers_Per_Year_Bar_Chart.png) |
+| ![Passenger_Per_Year_Bar_Chart](./plots/Passengers_Per_Year_Bar_Chart.png) |
 <br/>
 
  #### 3.3.3 Visualizations per Decade (Fatalities & Passengers Traveled)
@@ -229,9 +222,9 @@ ggplot(sum_passengers_per_decade,
 ```
 <br/>
 
-| ![Fatalities_Per_Year_Bar_Chart](./plane_crashes_R/plots/Fatalities_Per_Decade_Bar_Chart.png) |
+| ![Fatalities_Per_Decade_Chart](./plots/Fatalities_Per_Decade_Bar_Chart.png) |
 | ------------- |
-| ![Passenger_Per_Year_Bar_Chart](./plane_crashes_R/plots/Passengers_Per_Decade_Bar_Chart.png) |
+| ![Passenger_Per_Decade_Bar_Chart](/plots/Passengers_Per_Decade_Bar_Chart.png) |
 <br/>
 
  ### 3.4 Regression Analysis
@@ -305,7 +298,7 @@ Residuals close to zero means that our model made a good prediction. In our resu
 This slight overestimation can be explained by the observation of the Max residual which is 5520.5. This means that our model in this case largely underestimated the fatalities. Demonstrating that in this year there is an outlier. <br/><br/>
 Indeed, as we can also confirm visually in the scatterplot below the outlier event is the 9/11 terrorist attacks which caused a large spike in fatalities.
 
-![Fatalities_Per_Year_Bar_Chart](./plane_crashes_R/plots/Total_Fatalities_Per_Year_Scatterplot_9_11_outlier_Event.png)
+![Scatterplot_Outlier](./plots/Total_Fatalities_Per_Year_Scatterplot_9_11_outlier_Event.png)
 <br/>
 Chart Code Snippet: [```time_series.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/time_series.R)
 
@@ -343,7 +336,7 @@ ggplot(
   )
 ```
 
-![lm_Relationship_Between_Total_Fatalities_and_Passengers_Traveled](./plane_crashes_R/plots/lm_Relationship_Between_Total_Fatalities_and_Passengers_Traveled.png)
+![lm_Relationship_Between_Total_Fatalities_and_Passengers_Traveled](./plots/lm_Relationship_Between_Total_Fatalities_and_Passengers_Traveled.png)
 <br/>
 
 ## 4\. Conclusion, Insights & Limitations
