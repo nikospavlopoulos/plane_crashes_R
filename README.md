@@ -49,7 +49,7 @@ The initial step involves loading the raw data from the two datasets. (Airplane 
 Preparation and Cleaning steps include: Omitting non useful for our analysis columns (ex Time, Flight, Registration, cn.ln), Ensuring Values to be analysed are formatted as numbers, ensuring that 'NA' values are not polluting our data and tidying up columns and grouping by Decade.
 
 Code Snippet: [```read_clean_data.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/read_clean_data.R) 
-```
+```R
 # Import - Prepare - Clean - Airplane Crashes data
 crashes <- read.csv("crashes.csv") |>
   select(!c(Time, Flight.., Registration, cn.ln)) |>
@@ -102,7 +102,7 @@ To facilitate data merging during analysis and visualization, the data have been
 
 Code Snippets: [```year_dataframes.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/year_dataframes.R) & [```decade_dataframes.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/decade_dataframes.R)
 
-```
+```R
 # Summarize total fatalities per year
 sum_fatalities_per_year <- crashes |>
   select(Year, Total_Fatalities) |>
@@ -121,7 +121,7 @@ sum_passengers_fatalities_year <- sum_fatalities_per_year |>
   mutate(Fatalities_Per_100_million_Passengers 
          = floor((Total_Fatalities/Passengers_Traveled)*100000000))
 ```
-```
+```R
 # Summarize total fatalities per decade
 sum_fatalities_per_decade <- crashes |>
   select(Decade, Total_Fatalities) |>
@@ -173,7 +173,7 @@ The second one is the immediate drop of passenger volume during 2020 COVID-19 lo
 
 Code Snippets: [```year_plots.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/year_plots.R)
 <br/>
-```
+```R
 # Group fatalities per year and visualize it in a bar chart
 ggplot(sum_fatalities_per_year,
        aes(x = Year, y = Total_Fatalities)) +
@@ -202,7 +202,7 @@ ggplot(sum_passengers_per_year,
 
 Code Snippets: [```decade_plots.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/decade_plots.R)
 <br/>
-```
+```R
 ggplot(sum_fatalities_per_decade,
        aes(x = Decade, y = Total_Fatalities)) +
   scale_x_continuous(breaks = seq(1900,2020, by = 10)) +
@@ -257,7 +257,7 @@ For this model we are going to use:
 
 Code Snippet: [```lm_fatalities_passengers.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/lm_fatalities_passengers.R)
 
-```
+```R
 # Filtering Out Rows that have NA data. Before 1970 and after 2021.
 fatalities_passengers_filtered <- sum_passengers_fatalities_year |>
   filter(!is.na(Passengers_Traveled))
@@ -271,7 +271,7 @@ summary(lm_fatalities_passengers)
  #### 3.4.2 Summary of Regression Output
 
 The summary of our regression model is:
-```
+```R
 Call:
 lm(formula = Total_Fatalities ~ Passengers_Traveled, data = fatalities_passengers_filtered)
 
@@ -318,7 +318,7 @@ The chart below demonstrates the relationship between `Total_Fatalities` and `Pa
 
 Chart Code Snippet: [```lm_fatalities_passengers.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/lm_fatalities_passengers.R)
 
-```
+```R
 # Plot diagram - Linear Regression Model
 ggplot(
   fatalities_passengers_filtered,
