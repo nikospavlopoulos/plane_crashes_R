@@ -163,7 +163,7 @@ Indeed, as we can also confirm visually in the scatterplot below the outlier eve
 
 ![Scatterplot_Outlier](./plots/Total_Fatalities_Per_Year_Scatterplot_9_11_outlier_Event.png)
 <br/>
-Chart Code Snippet: [```time_series.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/time_series.R)
+**Chart Code Snippet: [```time_series.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/time_series.R)**
 
 - **Coefficients**: We observe that in the column `Estimate - Passengers_Traveled` the result is -4.193e-07 (Decimal Notation: -0.0000004193). Multiplying this with 100 000 000 (100 million) we get -41.93. <br/>
 The negative sign demonstrates that there is a negative correlation. In practical terms, there has been a decrease of approximately **~42** deaths for every 100 million additional Passengers Traveled . <br/><br/>
