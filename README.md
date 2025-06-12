@@ -41,109 +41,20 @@ Our analysis is divided into several stages. [R programming language](https://ww
 Each phase is implemented using R scripts, organized within the repository’s **[`src`](https://github.com/nikospavlopoulos/plane_crashes_R/tree/main/src)** directory. <br/>
 The methodology section describes data preparation, exploratory analysis, and statistical approaches.
 
-Libraries used: - [Tidyverse](https://www.tidyverse.org/packages/) - [Scales](https://scales.r-lib.org/)
+**Libraries used: - [Tidyverse](https://www.tidyverse.org/packages/) - [Scales](https://scales.r-lib.org/)**
 
 ### 3.1 Data Preparation and Cleaning 
 
 The initial step involves loading the raw data from the two datasets. (Airplane Crashes / Fatalities & Passengers Carried. <br/>
 Preparation and Cleaning steps include: Omitting non useful for our analysis columns (ex Time, Flight, Registration, cn.ln), Ensuring Values to be analysed are formatted as numbers, ensuring that 'NA' values are not polluting our data and tidying up columns and grouping by Decade.
 
-Code Snippet: [```read_clean_data.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/read_clean_data.R) 
-```R
-# Import - Prepare - Clean - Airplane Crashes data
-crashes <- read.csv("crashes.csv") |>
-  select(!c(Time, Flight.., Registration, cn.ln)) |>
-  mutate(Date = as.Date(Date, format = "%m/%d/%Y")) |>
-  mutate(
-    Year = as.integer(format(Date, "%Y")), 
-    Month = as.integer(format(Date, "%m"))
-  ) |>
-  relocate(Year, Month, .after = Date) |>
-  mutate(suppressWarnings(across(8:14, as.integer))) |>
-  mutate(across(8:14, ~ replace(., is.na(.), 0))) |>
-  filter(!if_all(8:14, ~ . == 0)) |>
-  mutate(
-    Fatalities = if_else(Fatalities == (Fatalities.Passangers + Fatalities.Crew),
- Fatalities, Fatalities.Passangers + Fatalities.Crew)
-  ) |>
-  mutate(
-    Total_Fatalities = Fatalities + Ground
-  ) |>
-  relocate(Total_Fatalities, .after = Ground) |>
-  mutate(
-    Decade = floor(Year/10) * 10
-  ) |>
-  relocate(Decade, .after = Year)
-
-# Import - Prepare - Clean - Passengers Traveled data
-passengers <- read.csv("Passengers_Carried_1970_2021.csv", header = FALSE) |> 
-  (\(x) `colnames<-`(x, x[5,]))() |> 
-  slice(-c(1:5)) |> 
-  rename(Country_Name = `Country Name`) |>
-  filter(Country_Name == "World") |>
-  select(c(1:4,15:66)) |>
-  pivot_longer(
-    cols = 5:56,
-    names_to = "Year",
-    values_to = "Passengers_Traveled"
-  ) |>
-  mutate(across(Year, as.numeric)) |>
-  mutate(Passengers_Traveled = as.numeric(gsub(",", "", Passengers_Traveled))) |>
-  mutate(
-    Decade = floor(Year/10) * 10
-  ) |>
-  relocate(Decade, .after = Year)
-```
+**Code Snippet: [```read_clean_data.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/read_clean_data.R)** 
 
  ### 3.2 Creating Grouped By Year & Decade - Dataframes
 
 To facilitate data merging during analysis and visualization, the data have been grouped by year and by decade into separate dataframes. 
 
-
-Code Snippets: [```year_dataframes.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/year_dataframes.R) & [```decade_dataframes.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/decade_dataframes.R)
-
-```R
-# Summarize total fatalities per year
-sum_fatalities_per_year <- crashes |>
-  select(Year, Total_Fatalities) |>
-  group_by(Year) |>
-  summarise(Total_Fatalities = sum(Total_Fatalities))
-
-# Summarize total passenger per year
-sum_passengers_per_year <- passengers |>
-  select(Year, Passengers_Traveled) |>
-  group_by(Year) |>
-  summarise(Passengers_Traveled = sum(Passengers_Traveled))
-
-# Left Join Tables - Grouped by year
-sum_passengers_fatalities_year <- sum_fatalities_per_year |>
-  left_join(sum_passengers_per_year, by = "Year") |>
-  mutate(Fatalities_Per_100_million_Passengers 
-         = floor((Total_Fatalities/Passengers_Traveled)*100000000))
-```
-```R
-# Summarize total fatalities per decade
-sum_fatalities_per_decade <- crashes |>
-  select(Decade, Total_Fatalities) |>
-# Omitting the first and last incomplete decades (~2 or 3 years of data)
-  filter(Decade != 1900 & Decade != 2020) |> 
-  group_by(Decade) |>
-  summarise(Total_Fatalities = sum(Total_Fatalities))
-
-# Summarize total passenger per decade
-sum_passengers_per_decade <- passengers |>
-  select(Decade, Passengers_Traveled) |>
-# Omitting the last as incomplete (only 2 years of data)
-  filter(Decade != 2020) |> 
-  group_by(Decade) |>
-  summarise(Passengers_Traveled = sum(Passengers_Traveled))
-
-# Left Join Tables - Grouped by decade
-sum_passengers_fatalities_decade <- sum_fatalities_per_decade |>
-  left_join(sum_passengers_per_decade, by = "Decade") |>
-  mutate(Fatalities_Per_100_million_Passengers 
-         = floor((Total_Fatalities/Passengers_Traveled)*100000000))
-```
+**Code Snippets: [```year_dataframes.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/year_dataframes.R) & [```decade_dataframes.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/decade_dataframes.R)**
 
  ### 3.3 Historical Trends & Visualizations
 
@@ -171,26 +82,7 @@ The second one is the immediate drop of passenger volume during 2020 COVID-19 lo
 
  #### 3.3.2 Visualizations per Year (Fatalities & Passengers Traveled)
 
-Code Snippets: [```year_plots.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/year_plots.R)
-<br/>
-```R
-# Group fatalities per year and visualize it in a bar chart
-ggplot(sum_fatalities_per_year,
-       aes(x = Year, y = Total_Fatalities)) +
-  scale_x_continuous(breaks = seq(1900,2020, by = 10)) +
-  scale_y_continuous(breaks = seq(0,20000, by = 1000)) +
-  geom_col(aes(fill = Year)) + 
-  labs ( title = "Fatalities Per Year Bar Chart")
-
-# Group passengers per year and visualize it in a bar chart
-ggplot(sum_passengers_per_year,
-       aes(x = Year, y = Passengers_Traveled,)) +
-  scale_x_continuous(breaks = seq(1900,2020, by = 10)) +
-  scale_y_continuous(labels = label_number(scale = 1e-9, suffix = " billion"),
-					 breaks = seq(0,40e+10, by = 5e+8)) +
-  geom_col(aes(fill = Year)) + 
-  labs ( title = "Passengers Per Year Bar Chart")
-```
+**Code Snippets: [```year_plots.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/year_plots.R)**
 <br/>
 
 | ![Fatalities_Per_Year_Bar_Chart](./plots/Fatalities_Per_Year_Bar_Chart.png) |
@@ -200,26 +92,8 @@ ggplot(sum_passengers_per_year,
 
  #### 3.3.3 Visualizations per Decade (Fatalities & Passengers Traveled)
 
-Code Snippets: [```decade_plots.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/decade_plots.R)
-<br/>
-```R
-ggplot(sum_fatalities_per_decade,
-       aes(x = Decade, y = Total_Fatalities)) +
-  scale_x_continuous(breaks = seq(1900,2020, by = 10)) +
-  scale_y_continuous(breaks = seq(0,20000, by = 2000)) +
-    geom_col(aes(fill = Decade)) + 
-  labs ( title = "Fatalities Per Decade Bar Chart")
+**Code Snippets: [```decade_plots.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/decade_plots.R)**
 
-# Group passengers per decade and visualize it in a bar chart
-
-ggplot(sum_passengers_per_decade,
-       aes(x = Decade, y = Passengers_Traveled,)) +
-  scale_x_continuous(breaks = seq(1900,2020, by = 10)) +
-  scale_y_continuous(labels = label_number(scale = 1e-9, suffix = " billion"), 
-                     breaks = seq(0,40e+10, by = 5e+9)) +
-  geom_col(aes(fill = Decade)) + 
-  labs ( title = "Passengers Per Decade Bar Chart")
-```
 <br/>
 
 | ![Fatalities_Per_Decade_Chart](./plots/Fatalities_Per_Decade_Bar_Chart.png) |
@@ -255,18 +129,7 @@ For this model we are going to use:
 - **As the Independent Variable:**  
     `Passengers_Traveled` – the number of passengers, which we believe might influence fatalities.
 
-Code Snippet: [```lm_fatalities_passengers.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/lm_fatalities_passengers.R)
-
-```R
-# Filtering Out Rows that have NA data. Before 1970 and after 2021.
-fatalities_passengers_filtered <- sum_passengers_fatalities_year |>
-  filter(!is.na(Passengers_Traveled))
-
-# Building the Linear Regression Model
-lm_fatalities_passengers <- lm(Total_Fatalities ~ Passengers_Traveled, 
-                               data = fatalities_passengers_filtered)
-summary(lm_fatalities_passengers)
-```
+**Code Snippet: [```lm_fatalities_passengers.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/lm_fatalities_passengers.R)**
 
  #### 3.4.2 Summary of Regression Output
 
@@ -316,25 +179,7 @@ In practical terms that means that the majority `78.28%` is due to other factors
 
 The chart below demonstrates the relationship between `Total_Fatalities` and `Passengers_Traveled`. The green line demonstrates the results from the linear regression model implemented above. 
 
-Chart Code Snippet: [```lm_fatalities_passengers.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/lm_fatalities_passengers.R)
-
-```R
-# Plot diagram - Linear Regression Model
-ggplot(
-  fatalities_passengers_filtered,
-  aes(x = Passengers_Traveled, y = Total_Fatalities)
-) + 
-  geom_point(shape = "bullet", size = 2, color="red") +
-  scale_x_continuous(breaks = seq(1970,2021, by = 5)) +
-  scale_y_continuous(breaks = seq(0,8000, by = 1000)) +
-  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "green") +
-  theme_linedraw() + 
-  labs(
-    title = "Relationship Between Total Fatalities and Passengers Traveled",
-    x = "Passengers Traveled Per Year",
-    y = "Total Fatalities Per Year"
-  )
-```
+**Chart Code Snippet: [```lm_fatalities_passengers.R```](https://github.com/nikospavlopoulos/plane_crashes_R/blob/main/src/lm_fatalities_passengers.R)**
 
 ![lm_Relationship_Between_Total_Fatalities_and_Passengers_Traveled](./plots/lm_Relationship_Between_Total_Fatalities_and_Passengers_Traveled.png)
 <br/>
